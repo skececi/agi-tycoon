@@ -10,9 +10,9 @@ import { startTraining } from './lib/gameLogic';
 import type { ModelType } from './lib/types';
 import {
   HIRE_COST,
-  COMPUTE_COST,
   COMPUTE_AMOUNT,
   OFFICE_UPGRADES,
+  getComputeCost,
 } from './lib/constants';
 import './index.css';
 
@@ -52,10 +52,11 @@ function App() {
 
   const handleBuyCompute = () => {
     updateState((prev) => {
-      if (prev.money < COMPUTE_COST) return prev;
+      const cost = getComputeCost(prev.computeUnits);
+      if (prev.money < cost) return prev;
       return {
         ...prev,
-        money: prev.money - COMPUTE_COST,
+        money: prev.money - cost,
         computeUnits: prev.computeUnits + COMPUTE_AMOUNT,
       };
     });

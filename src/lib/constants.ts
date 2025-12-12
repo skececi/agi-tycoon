@@ -6,8 +6,14 @@ export const INITIAL_COMPUTE = 10;
 export const INITIAL_OFFICE_TIER = 1;
 
 export const HIRE_COST = 2000;
-export const COMPUTE_COST = 3000;
+export const COMPUTE_BASE_COST = 3000;
 export const COMPUTE_AMOUNT = 10;
+export const COMPUTE_SCALE_FACTOR = 1.15;
+
+export function getComputeCost(currentCompute: number): number {
+  const purchases = Math.floor((currentCompute - INITIAL_COMPUTE) / COMPUTE_AMOUNT);
+  return Math.round(COMPUTE_BASE_COST * Math.pow(COMPUTE_SCALE_FACTOR, purchases));
+}
 
 export const OFFICE_UPGRADES: Record<number, { cost: number; maxEngineers: number }> = {
   1: { cost: 0, maxEngineers: 3 },

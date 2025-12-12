@@ -1,4 +1,4 @@
-import { OFFICE_UPGRADES, HIRE_COST, COMPUTE_COST, COMPUTE_AMOUNT } from '../lib/constants';
+import { OFFICE_UPGRADES, HIRE_COST, COMPUTE_AMOUNT, getComputeCost } from '../lib/constants';
 
 interface OfficeProps {
   engineers: number;
@@ -22,10 +22,11 @@ export function Office({
   const maxEngineers = OFFICE_UPGRADES[officeTier].maxEngineers;
   const nextTier = officeTier < 5 ? officeTier + 1 : null;
   const upgradeCost = nextTier ? OFFICE_UPGRADES[nextTier].cost : 0;
+  const computeCost = getComputeCost(computeUnits);
 
   const canHire = money >= HIRE_COST && engineers < maxEngineers;
   const canUpgrade = nextTier && money >= upgradeCost;
-  const canBuyCompute = money >= COMPUTE_COST;
+  const canBuyCompute = money >= computeCost;
 
   return (
     <div className="panel office">
@@ -57,7 +58,7 @@ export function Office({
         )}
         
         <button onClick={onBuyCompute} disabled={!canBuyCompute} className="btn">
-          +{COMPUTE_AMOUNT} Compute (${COMPUTE_COST.toLocaleString()})
+          +{COMPUTE_AMOUNT} Compute (${computeCost.toLocaleString()})
         </button>
       </div>
     </div>
