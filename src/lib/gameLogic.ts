@@ -2,9 +2,9 @@ import type { GameState, Model, TrainingJob, ModelType } from './types';
 import {
   MAX_MODEL_LIFE,
   REVENUE_MULTIPLIER,
-  TRAINING_DURATION,
   MODEL_PREFIXES,
   MODEL_SUFFIXES,
+  getTrainingDuration,
 } from './constants';
 
 export function generateModelName(type: ModelType): string {
@@ -94,7 +94,7 @@ export function startTraining(
       engineersAllocated: engineers,
       computeAllocated: compute,
       startTick: state.tick,
-      duration: TRAINING_DURATION,
+      duration: getTrainingDuration(compute),
     },
   };
 }

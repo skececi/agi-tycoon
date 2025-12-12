@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ModelType, TrainingJob } from '../lib/types';
-import { MODEL_TASKS } from '../lib/constants';
+import { MODEL_TASKS, getTrainingDuration } from '../lib/constants';
 import { getTrainingProgress } from '../lib/gameLogic';
 
 interface TrainingPanelProps {
@@ -90,6 +90,10 @@ export function TrainingPanel({
               value={allocCompute}
               onChange={(e) => setAllocCompute(Number(e.target.value))}
             />
+          </div>
+
+          <div className="training-estimate">
+            Est. Training Time: <span>{getTrainingDuration(allocCompute)} days</span>
           </div>
 
           <button onClick={handleTrain} className="btn primary">

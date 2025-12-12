@@ -23,7 +23,12 @@ export const OFFICE_UPGRADES: Record<number, { cost: number; maxEngineers: numbe
   5: { cost: 150000, maxEngineers: 50 },
 };
 
-export const TRAINING_DURATION = 45;
+export const TRAINING_BASE_DURATION = 30;
+export const TRAINING_COMPUTE_FACTOR = 2;
+
+export function getTrainingDuration(compute: number): number {
+  return TRAINING_BASE_DURATION + Math.floor(compute * TRAINING_COMPUTE_FACTOR);
+}
 export const MAX_MODEL_LIFE = 300;
 export const REVENUE_MULTIPLIER = 2;
 

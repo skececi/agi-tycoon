@@ -264,6 +264,22 @@ body {
   box-shadow: 0 0 10px var(--accent-glow);
 }
 
+.training-estimate {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: var(--bg-card);
+  border-radius: 8px;
+}
+
+.training-estimate span {
+  color: var(--purple);
+  font-weight: 600;
+}
+
 /* Training Progress */
 .training-progress {
   text-align: center;
