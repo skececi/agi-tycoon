@@ -23,7 +23,7 @@ export const OFFICE_UPGRADES: Record<number, { cost: number; maxEngineers: numbe
   5: { cost: 150000, maxEngineers: 50 },
 };
 
-export const TRAINING_DURATION = 10;
+export const TRAINING_DURATION = 45;
 export const MAX_MODEL_LIFE = 300;
 export const REVENUE_MULTIPLIER = 2;
 
