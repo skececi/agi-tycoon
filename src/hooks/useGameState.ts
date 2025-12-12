@@ -18,6 +18,7 @@ const createInitialState = (): GameState => ({
   trainingJob: null,
   tick: 0,
   hasWon: false,
+  gameStarted: false,
 });
 
 export function useGameState() {

@@ -472,6 +472,79 @@ body {
   letter-spacing: 1px;
 }
 
+/* Intro Screen */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  background-image: 
+    radial-gradient(ellipse at 30% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.intro-modal {
+  text-align: center;
+  max-width: 500px;
+  padding: 40px;
+  animation: intro-appear 1s ease-out;
+}
+
+@keyframes intro-appear {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.intro-modal h1 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 60px var(--accent-glow);
+}
+
+.intro-narrative {
+  margin-bottom: 40px;
+}
+
+.intro-narrative p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.intro-narrative .year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.intro-narrative .highlight {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.intro-narrative .question {
+  font-style: italic;
+  color: var(--text);
+  margin-top: 20px;
+}
+
+/* Date in header */
+.stat .date {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-dim);
+}
+
 /* Responsive */
 @media (max-width: 700px) {
   .top-panels {
@@ -484,9 +557,14 @@ body {
     text-align: center;
   }
   
-  .win-modal {
+  .win-modal,
+  .intro-modal {
     margin: 20px;
     padding: 32px;
+  }
+  
+  .intro-modal h1 {
+    font-size: 36px;
   }
   
   .win-stats {

@@ -28,5 +28,6 @@ export interface GameState {
   trainingJob: TrainingJob | null;
   tick: number;
   hasWon: boolean;
+  gameStarted: boolean;
 }
 

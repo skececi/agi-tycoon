@@ -1,3 +1,5 @@
+import { tickToDate } from '../lib/dateUtils';
+
 interface HeaderProps {
   money: number;
   tick: number;
@@ -13,8 +15,7 @@ export function Header({ money, tick }: HeaderProps) {
           <span className="value">{money.toLocaleString()}</span>
         </div>
         <div className="stat">
-          <span className="label">Tick</span>
-          <span className="value">{tick}</span>
+          <span className="value date">{tickToDate(tick)}</span>
         </div>
       </div>
     </header>

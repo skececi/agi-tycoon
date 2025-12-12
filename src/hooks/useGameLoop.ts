@@ -10,13 +10,13 @@ export function useGameLoop(
   stateRef.current = state;
 
   useEffect(() => {
-    if (state.hasWon) return;
+    if (state.hasWon || !state.gameStarted) return;
 
     const interval = setInterval(() => {
       updateState(processTick);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [updateState, state.hasWon]);
+  }, [updateState, state.hasWon, state.gameStarted]);
 }
 

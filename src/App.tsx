@@ -5,6 +5,7 @@ import { Office } from './components/Office';
 import { TrainingPanel } from './components/TrainingPanel';
 import { ModelList } from './components/ModelList';
 import { WinScreen } from './components/WinScreen';
+import { IntroScreen } from './components/IntroScreen';
 import { startTraining } from './lib/gameLogic';
 import type { ModelType } from './lib/types';
 import {
@@ -18,6 +19,10 @@ import './index.css';
 function App() {
   const { state, updateState, resetGame } = useGameState();
   useGameLoop(state, updateState);
+
+  const handleStartGame = () => {
+    updateState((prev) => ({ ...prev, gameStarted: true }));
+  };
 
   const handleHire = () => {
     updateState((prev) => {
@@ -64,6 +69,10 @@ function App() {
   ) => {
     updateState((prev) => startTraining(prev, type, task, engineers, compute));
   };
+
+  if (!state.gameStarted) {
+    return <IntroScreen onStart={handleStartGame} />;
+  }
 
   return (
     <div className="app">
