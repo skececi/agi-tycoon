@@ -15,8 +15,12 @@ export function generateModelName(type: ModelType): string {
 }
 
 export function calculateScore(engineers: number, compute: number): number {
-  const baseScore = engineers * 8 + compute * 4;
-  const luckFactor = 0.7 + Math.random() * 0.6;
+  // Requires both engineers AND compute - multiplicative scaling
+  // ~100 engineers + ~5000 compute needed for AGI (score 100)
+  const engineerFactor = Math.pow(engineers, 0.6);
+  const computeFactor = Math.log10(Math.max(10, compute)) * 4;
+  const baseScore = engineerFactor * computeFactor;
+  const luckFactor = 0.85 + Math.random() * 0.3;
   return Math.min(100, Math.round(baseScore * luckFactor));
 }
 

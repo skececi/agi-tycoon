@@ -9,10 +9,10 @@ import { IntroScreen } from './components/IntroScreen';
 import { startTraining } from './lib/gameLogic';
 import type { ModelType } from './lib/types';
 import {
-  HIRE_COST,
   COMPUTE_AMOUNT,
   OFFICE_UPGRADES,
   getComputeCost,
+  getHireCost,
 } from './lib/constants';
 import './index.css';
 
@@ -27,10 +27,11 @@ function App() {
   const handleHire = () => {
     updateState((prev) => {
       const maxEngineers = OFFICE_UPGRADES[prev.officeTier].maxEngineers;
-      if (prev.money < HIRE_COST || prev.engineers >= maxEngineers) return prev;
+      const hireCost = getHireCost(prev.engineers);
+      if (prev.money < hireCost || prev.engineers >= maxEngineers) return prev;
       return {
         ...prev,
-        money: prev.money - HIRE_COST,
+        money: prev.money - hireCost,
         engineers: prev.engineers + 1,
       };
     });
@@ -38,7 +39,7 @@ function App() {
 
   const handleUpgrade = () => {
     updateState((prev) => {
-      if (prev.officeTier >= 5) return prev;
+      if (prev.officeTier >= 6) return prev;
       const nextTier = prev.officeTier + 1;
       const cost = OFFICE_UPGRADES[nextTier].cost;
       if (prev.money < cost) return prev;

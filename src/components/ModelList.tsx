@@ -11,7 +11,7 @@ export function ModelList({ models, tick }: ModelListProps) {
     return (
       <div className="panel model-list empty">
         <h2>Active Models</h2>
-        <p className="empty-message">No models deployed yet. Train your first model!</p>
+        <p className="empty-message">No models deployed yet. Train a model!</p>
       </div>
     );
   }
