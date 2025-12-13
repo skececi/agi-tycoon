@@ -84,7 +84,7 @@ export function startTraining(
 ): GameState {
   if (state.trainingJob) return state;
   if (engineers > state.engineers) return state;
-  if (compute > state.computeUnits) return state;
+  if (compute > state.gpus) return state;
 
   return {
     ...state,

@@ -14,7 +14,7 @@ export function useGameLoop(
 
     const interval = setInterval(() => {
       updateState(processTick);
-    }, 1000);
+    }, 200);
 
     return () => clearInterval(interval);
   }, [updateState, state.hasWon, state.gameStarted]);

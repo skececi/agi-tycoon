@@ -23,7 +23,7 @@ export interface GameState {
   money: number;
   engineers: number;
   officeTier: number;
-  computeUnits: number;
+  gpus: number;
   activeModels: Model[];
   trainingJob: TrainingJob | null;
   tick: number;

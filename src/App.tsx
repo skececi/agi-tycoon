@@ -52,12 +52,12 @@ function App() {
 
   const handleBuyCompute = () => {
     updateState((prev) => {
-      const cost = getComputeCost(prev.computeUnits);
+      const cost = getComputeCost(prev.gpus);
       if (prev.money < cost) return prev;
       return {
         ...prev,
         money: prev.money - cost,
-        computeUnits: prev.computeUnits + COMPUTE_AMOUNT,
+        gpus: prev.gpus + COMPUTE_AMOUNT,
       };
     });
   };
@@ -84,7 +84,7 @@ function App() {
           <Office
             engineers={state.engineers}
             officeTier={state.officeTier}
-            computeUnits={state.computeUnits}
+            gpus={state.gpus}
             money={state.money}
             onHire={handleHire}
             onUpgrade={handleUpgrade}
@@ -92,7 +92,7 @@ function App() {
           />
           <TrainingPanel
             engineers={state.engineers}
-            computeUnits={state.computeUnits}
+            gpus={state.gpus}
             trainingJob={state.trainingJob}
             tick={state.tick}
             onStartTraining={handleStartTraining}

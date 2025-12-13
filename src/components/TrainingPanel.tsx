@@ -5,7 +5,7 @@ import { getTrainingProgress } from '../lib/gameLogic';
 
 interface TrainingPanelProps {
   engineers: number;
-  computeUnits: number;
+  gpus: number;
   trainingJob: TrainingJob | null;
   tick: number;
   onStartTraining: (type: ModelType, task: string, engineers: number, compute: number) => void;
@@ -13,7 +13,7 @@ interface TrainingPanelProps {
 
 export function TrainingPanel({
   engineers,
-  computeUnits,
+  gpus,
   trainingJob,
   tick,
   onStartTraining,
@@ -82,11 +82,11 @@ export function TrainingPanel({
           </div>
 
           <div className="form-group">
-            <label>Compute ({allocCompute}/{computeUnits})</label>
+            <label>GPUs ({allocCompute}/{gpus})</label>
             <input
               type="range"
               min={1}
-              max={computeUnits}
+              max={gpus}
               value={allocCompute}
               onChange={(e) => setAllocCompute(Number(e.target.value))}
             />

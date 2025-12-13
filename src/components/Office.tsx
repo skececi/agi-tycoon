@@ -3,7 +3,7 @@ import { OFFICE_UPGRADES, HIRE_COST, COMPUTE_AMOUNT, getComputeCost } from '../l
 interface OfficeProps {
   engineers: number;
   officeTier: number;
-  computeUnits: number;
+  gpus: number;
   money: number;
   onHire: () => void;
   onUpgrade: () => void;
@@ -13,7 +13,7 @@ interface OfficeProps {
 export function Office({
   engineers,
   officeTier,
-  computeUnits,
+  gpus,
   money,
   onHire,
   onUpgrade,
@@ -22,7 +22,7 @@ export function Office({
   const maxEngineers = OFFICE_UPGRADES[officeTier].maxEngineers;
   const nextTier = officeTier < 5 ? officeTier + 1 : null;
   const upgradeCost = nextTier ? OFFICE_UPGRADES[nextTier].cost : 0;
-  const computeCost = getComputeCost(computeUnits);
+  const computeCost = getComputeCost(gpus);
 
   const canHire = money >= HIRE_COST && engineers < maxEngineers;
   const canUpgrade = nextTier && money >= upgradeCost;
@@ -43,7 +43,7 @@ export function Office({
 
       <div className="office-stats">
         <p>Engineers: {engineers}/{maxEngineers}</p>
-        <p>Compute: {computeUnits} units</p>
+        <p>GPUs: {gpus}</p>
       </div>
 
       <div className="office-actions">
@@ -58,7 +58,7 @@ export function Office({
         )}
         
         <button onClick={onBuyCompute} disabled={!canBuyCompute} className="btn">
-          +{COMPUTE_AMOUNT} Compute (${computeCost.toLocaleString()})
+          +{COMPUTE_AMOUNT} GPUs (${computeCost.toLocaleString()})
         </button>
       </div>
     </div>

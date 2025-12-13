@@ -13,7 +13,7 @@ const createInitialState = (): GameState => ({
   money: INITIAL_MONEY,
   engineers: INITIAL_ENGINEERS,
   officeTier: INITIAL_OFFICE_TIER,
-  computeUnits: INITIAL_COMPUTE,
+  gpus: INITIAL_COMPUTE,
   activeModels: [],
   trainingJob: null,
   tick: 0,
