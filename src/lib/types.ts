@@ -1,13 +1,17 @@
 export type ModelType = 'language' | 'image' | 'video';
 
+export interface Benchmarks {
+  [trait: string]: number;
+}
+
 export interface Model {
   id: string;
   name: string;
   type: ModelType;
   task: string;
-  score: number;
+  benchmarks: Benchmarks;
+  overallScore: number;
   createdAt: number;
-  revenuePerTick: number;
 }
 
 export interface TrainingJob {

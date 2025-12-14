@@ -1,9 +1,9 @@
-import type { GameState, Model, TrainingJob, ModelType } from './types';
+import type { GameState, Model, TrainingJob, ModelType, Benchmarks } from './types';
 import {
   MAX_MODEL_LIFE,
-  REVENUE_MULTIPLIER,
   MODEL_PREFIXES,
   MODEL_SUFFIXES,
+  MODEL_TASKS,
   getTrainingDuration,
 } from './constants';
 
@@ -14,14 +14,52 @@ export function generateModelName(type: ModelType): string {
   return `${prefix}-${suffix}`;
 }
 
-export function calculateScore(engineers: number, compute: number): number {
-  // Requires both engineers AND compute - multiplicative scaling
-  // ~100 engineers + ~5000 compute needed for AGI (score 100)
-  const engineerFactor = Math.pow(engineers, 0.6);
-  const computeFactor = Math.log10(Math.max(10, compute)) * 4;
-  const baseScore = engineerFactor * computeFactor;
-  const luckFactor = 0.85 + Math.random() * 0.3;
-  return Math.min(100, Math.round(baseScore * luckFactor));
+function gaussianRandom(): number {
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
+export function calculateBenchmarks(
+  type: ModelType,
+  task: string,
+  engineers: number,
+  compute: number
+): { benchmarks: Benchmarks; overallScore: number } {
+  const tasks = MODEL_TASKS[type];
+  const benchmarks: Benchmarks = {};
+  
+  const engineerFactor = Math.pow(engineers, 0.55);
+  const computeFactor = Math.log10(Math.max(10, compute)) * 3.5;
+  const basePotential = engineerFactor * computeFactor;
+  
+  // Global luck swing: sometimes you nail it, sometimes you fumble
+  const globalLuck = 0.5 + Math.random() * 1.0;
+  
+  let total = 0;
+  for (const t of tasks) {
+    let traitBase = basePotential * globalLuck;
+    
+    // Focused task gets a significant boost, others get penalties
+    if (t === task) {
+      traitBase *= 1.3 + Math.random() * 0.4;
+    } else {
+      traitBase *= 0.4 + Math.random() * 0.5;
+    }
+    
+    // Per-trait variance (can swing ±30%)
+    const traitVariance = 1 + gaussianRandom() * 0.15;
+    let score = Math.round(traitBase * traitVariance);
+    
+    // Clamp and allow some truly bad results
+    score = Math.max(5, Math.min(100, score));
+    benchmarks[t] = score;
+    total += score;
+  }
+  
+  const overallScore = Math.round(total / tasks.length);
+  return { benchmarks, overallScore };
 }
 
 export function calculateDecay(tick: number, createdAt: number): number {
@@ -29,20 +67,28 @@ export function calculateDecay(tick: number, createdAt: number): number {
   return Math.max(0, 1 - ticksAlive / MAX_MODEL_LIFE);
 }
 
-export function calculateRevenue(score: number, decayFactor: number): number {
-  return Math.round(score * REVENUE_MULTIPLIER * decayFactor);
+export function calculateRevenue(overallScore: number, decayFactor: number): number {
+  // Exponential revenue: bad models barely pay, great models print money
+  // score 20 → ~$40/tick, score 50 → ~$2.5k/tick, score 80 → ~$65k/tick, score 100 → ~$1M/tick
+  const exponentialBase = Math.pow(overallScore / 10, 3.2);
+  return Math.round(exponentialBase * 100 * decayFactor);
 }
 
 export function completeTraining(job: TrainingJob, tick: number): Model {
-  const score = calculateScore(job.engineersAllocated, job.computeAllocated);
+  const { benchmarks, overallScore } = calculateBenchmarks(
+    job.type,
+    job.task,
+    job.engineersAllocated,
+    job.computeAllocated
+  );
   return {
     id: crypto.randomUUID(),
     name: generateModelName(job.type),
     type: job.type,
     task: job.task,
-    score,
+    benchmarks,
+    overallScore,
     createdAt: tick,
-    revenuePerTick: score * REVENUE_MULTIPLIER,
   };
 }
 
@@ -53,7 +99,7 @@ export function processTick(state: GameState): GameState {
   if (trainingJob && tick >= trainingJob.startTick + trainingJob.duration) {
     const newModel = completeTraining(trainingJob, tick);
     activeModels = [...activeModels, newModel];
-    if (newModel.score >= 100) {
+    if (newModel.overallScore >= 100) {
       hasWon = true;
     }
     trainingJob = null;
@@ -63,7 +109,7 @@ export function processTick(state: GameState): GameState {
   activeModels = activeModels.filter((model) => {
     const decay = calculateDecay(tick, model.createdAt);
     if (decay <= 0) return false;
-    tickRevenue += calculateRevenue(model.score, decay);
+    tickRevenue += calculateRevenue(model.overallScore, decay);
     return true;
   });
 

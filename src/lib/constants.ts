@@ -37,7 +37,6 @@ export function getTrainingDuration(compute: number): number {
 }
 
 export const MAX_MODEL_LIFE = 400;
-export const REVENUE_MULTIPLIER = 500;
 
 export const MODEL_TASKS: Record<ModelType, string[]> = {
   language: ['coding', 'writing', 'reasoning', 'translation'],
